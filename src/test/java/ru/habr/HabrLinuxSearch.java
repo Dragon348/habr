@@ -24,9 +24,13 @@ public class HabrLinuxSearch extends SeleniumProperties{
         select.selectByVisibleText("Разработка");
         element.submit();
         List<WebElement> elements = driver.findElementsByXPath("//h2[@class='post__title']//a[1]");
-                                                                      //  /html[1]/body[1]/div[1]/div[3]/div[1]/section[1]/div[1]/div[3]/ul[1]/li[3]/article[1]/h2[1]/a[1]
+        //ul[@id='infopanel_post_440810']//span[contains(@title,'Читать комментарии')][contains(text(),'5')]
+                                                                     //  /html[1]/body[1]/div[1]/div[3]/div[1]/section[1]/div[1]/div[3]/ul[1]/li[3]/article[1]/h2[1]/a[1]
         for (WebElement element1:elements) {
-            System.out.println(element1.getText());
+            System.out.println(element1.getAttribute("href"));
+            String path = '"' + "//a[@href=" + "'" + element1.getAttribute("href") + "#comments" + "'"  + ']' + '"';
+            WebElement comment = driver.findElement(By.xpath(path));
+            System.out.println(element1.getAttribute(comment.getText()));
         }
     }
 }
