@@ -13,8 +13,8 @@ public class SeleniumProperties {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
-    /*@After
+    @After
     public void afterTest() {
         driver.quit();
-    }*/
+    }
 }
