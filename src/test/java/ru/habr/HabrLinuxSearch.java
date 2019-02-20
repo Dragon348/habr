@@ -13,10 +13,6 @@ import static java.util.Map.Entry.comparingByValue;
 
 
 public class HabrLinuxSearch extends SeleniumProperties{
-    public WebElement searchButton;
-    public WebElement searchField;
-    public WebElement flowList;
-    public WebElement orderByDateButton;
     @Test
     public void linuxSearch() {
 
