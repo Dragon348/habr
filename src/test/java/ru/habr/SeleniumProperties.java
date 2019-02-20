@@ -9,12 +9,12 @@ public class SeleniumProperties {
     public ChromeDriver driver;
     @Before
     public void setConfig() {
-        System.setProperty("webdriver.chrome.driver", "F:\\Projects\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "C:\\temp\\chromedriver.exe");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
-    /*@After
+    @After
     public void afterTest() {
         driver.quit();
-    }*/
+    }
 }
