@@ -5,7 +5,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static java.util.Map.Entry.comparingByValue;
 
 
 public class HabrLinuxSearch extends SeleniumProperties{
@@ -23,14 +27,27 @@ public class HabrLinuxSearch extends SeleniumProperties{
         Select select = new Select(element);
         select.selectByVisibleText("Разработка");
         element.submit();
+        driver.findElementByXPath("//a[contains(@href, 'order_by=date')]").click();
         List<WebElement> elements = driver.findElementsByXPath("//h2[@class='post__title']//a[1]");
-        //ul[@id='infopanel_post_440810']//span[contains(@title,'Читать комментарии')][contains(text(),'5')]
-                                                                     //  /html[1]/body[1]/div[1]/div[3]/div[1]/section[1]/div[1]/div[3]/ul[1]/li[3]/article[1]/h2[1]/a[1]
+        HashMap<String, Integer> articles = new HashMap<String, Integer>();
         for (WebElement element1:elements) {
             System.out.println(element1.getAttribute("href"));
-            String path = '"' + "//a[@href=" + "'" + element1.getAttribute("href") + "#comments" + "'"  + ']' + '"';
-            WebElement comment = driver.findElement(By.xpath(path));
-            System.out.println(element1.getAttribute(comment.getText()));
-        }
+            String path = "//a[@href=" + "'" + element1.getAttribute("href") + "#comments" + "'"  + ']' ;
+            WebElement comment = driver.findElementByXPath(path);
+
+            System.out.println(comment.getText());
+            int commentCount;
+            try {
+                commentCount = Integer.parseInt(comment.getText());
+            }
+            catch (Throwable t) {
+                commentCount = 0;
+            }
+            articles.put(element1.getAttribute("href"), commentCount);
+            }
+
+        articles.entrySet().stream().sorted(Map.Entry.<String, Integer>comparingByValue().reversed()).forEach(System.out::println);
     }
+
 }
+
