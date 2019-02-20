@@ -13,29 +13,30 @@ import static java.util.Map.Entry.comparingByValue;
 
 
 public class HabrLinuxSearch extends SeleniumProperties{
+    public WebElement searchButton;
+    public WebElement searchField;
+    public WebElement flowList;
+    public WebElement orderByDateButton;
     @Test
     public void linuxSearch() {
 
         driver.get("https://habr.com/ru/");
-        WebElement element;
-        element = driver.findElement(By.id("search-form-btn"));
-        element.click();
-        element = driver.findElement(By.id("search-form-field"));
-        element.sendKeys("Linux");
-        element.submit();
-        element = driver.findElement(By.id("flow"));
-        Select select = new Select(element);
+        searchButton = driver.findElement(By.id("search-form-btn"));
+        searchButton.click();
+        searchField = driver.findElement(By.id("search-form-field"));
+        searchField.sendKeys("Linux");
+        searchField.submit();
+        flowList = driver.findElement(By.id("flow"));
+        Select select = new Select(flowList);
         select.selectByVisibleText("Разработка");
-        element.submit();
-        driver.findElementByXPath("//a[contains(@href, 'order_by=date')]").click();
-        List<WebElement> elements = driver.findElementsByXPath("//h2[@class='post__title']//a[1]");
+        flowList.submit();
+        orderByDateButton = driver.findElementByXPath("//a[contains(@href, 'order_by=date')]");
+        orderByDateButton.click();
+        List<WebElement> articleList = driver.findElementsByXPath("//h2[@class='post__title']//a[1]");
         HashMap<String, Integer> articles = new HashMap<String, Integer>();
-        for (WebElement element1:elements) {
-            System.out.println(element1.getAttribute("href"));
-            String path = "//a[@href=" + "'" + element1.getAttribute("href") + "#comments" + "'"  + ']' ;
+        for (WebElement articleHead:articleList) {
+            String path = "//a[@href=" + "'" + articleHead.getAttribute("href") + "#comments" + "'"  + ']' ;
             WebElement comment = driver.findElementByXPath(path);
-
-            System.out.println(comment.getText());
             int commentCount;
             try {
                 commentCount = Integer.parseInt(comment.getText());
@@ -43,8 +44,8 @@ public class HabrLinuxSearch extends SeleniumProperties{
             catch (Throwable t) {
                 commentCount = 0;
             }
-            articles.put(element1.getAttribute("href"), commentCount);
-            }
+            articles.put(articleHead.getAttribute("href"), commentCount);
+        }
 
         articles.entrySet().stream().sorted(Map.Entry.<String, Integer>comparingByValue().reversed()).forEach(System.out::println);
     }
